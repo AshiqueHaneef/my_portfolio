@@ -1,1208 +1,741 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Muhammed Ashique K – Senior Software Developer & Team Lead. Expert in Flutter, React, and NestJS based in Kerala, India.">
-    <title>Muhammed Ashique K | Senior Software Developer</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- Lucide Icons (React-like icons for Vanilla JS) -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        :root {
-            --bg-primary: #0a0a0c;
-            --bg-secondary: #121215;
-            --bg-accent: #1a1a1f;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent: #38bdf8; /* Sky 400 */
-            --accent-glow: rgba(56, 189, 248, 0.15);
-            --border: rgba(255, 255, 255, 0.08);
-            --success: #10b981;
-            --font-main: 'Inter', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: var(--font-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Background Pattern */
-        .bg-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .bg-glow {
-            position: fixed;
-            top: -10%;
-            right: -10%;
-            width: 50%;
-            height: 50%;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-            z-index: -1;
-            filter: blur(80px);
-        }
-
-        /* Layout */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        section {
-            padding: 100px 0;
-        }
-
-        /* ===== Standardized Animation System ===== */
-        :root {
-            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-            --reveal-dur: 0.7s;
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(28px);
-            transition: opacity var(--reveal-dur) var(--ease-out),
-                        transform var(--reveal-dur) var(--ease-out);
-            transition-delay: var(--reveal-delay, 0s);
-            will-change: opacity, transform;
-        }
-        .reveal--left  { transform: translateX(-32px); }
-        .reveal--right { transform: translateX(32px); }
-        .reveal--scale { transform: scale(0.94); }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: none;
-        }
-
-        /* Hero entrance on load (no scroll trigger needed) */
-        @keyframes heroIn {
-            from { opacity: 0; transform: translateY(24px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .hero-anim {
-            opacity: 0;
-            animation: heroIn 0.8s var(--ease-out) forwards;
-            animation-delay: var(--reveal-delay, 0s);
-        }
-
-        /* Respect user motion preferences */
-        @media (prefers-reduced-motion: reduce) {
-            .reveal, .hero-anim {
-                opacity: 1 !important;
-                transform: none !important;
-                animation: none !important;
-                transition: none !important;
-            }
-            html { scroll-behavior: auto; }
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 1.25rem 0;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid transparent;
-        }
-
-        nav.scrolled {
-            background: rgba(10, 10, 12, 0.8);
-            border-bottom: 1px solid var(--border);
-            padding: 0.8rem 0;
-        }
-
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: var(--font-mono);
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: var(--text-primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo span {
-            color: var(--accent);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-
-        .contact-btn {
-            background: var(--text-primary);
-            color: var(--bg-primary);
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-decoration: none;
-            transition: transform 0.2s, opacity 0.2s;
-        }
-
-        .contact-btn:hover {
-            transform: translateY(-1px);
-            opacity: 0.9;
-        }
-
-        /* Hero Section */
-        #hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding-top: 80px;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--bg-accent);
-            padding: 0.5rem 1rem;
-            border-radius: 100px;
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--accent);
-            border: 1px solid var(--border);
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-title {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .hero-title span {
-            display: block;
-            color: var(--text-secondary);
-        }
-
-        .hero-desc {
-            font-size: 1.15rem;
-            color: var(--text-secondary);
-            max-width: 580px;
-            margin-bottom: 2.5rem;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.8rem 1.8rem;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: #000;
-        }
-
-        .btn-secondary {
-            background: var(--bg-accent);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -10px var(--accent-glow);
-        }
-
-        /* Profile Card */
-        .profile-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 2.5rem;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-        }
-
-        .profile-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-        }
-
-        .profile-img-wrap {
-            width: 100px;
-            height: 100px;
-            border-radius: 20px;
-            background: var(--bg-accent);
-            margin-bottom: 1.5rem;
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-
-        .profile-img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .card-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .stat-item {
-            background: var(--bg-accent);
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        .stat-val {
-            font-family: var(--font-mono);
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .stat-lbl {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Section Headers */
-        .section-tag {
-            font-family: var(--font-mono);
-            color: var(--accent);
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-        }
-
-        /* About */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2.5rem;
-        }
-        .about-lead {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-        .about-lead strong { color: var(--text-primary); }
-        @media (max-width: 968px) {
-            .about-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-        }
-
-        /* Experience Timeline */
-        .timeline {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .experience-item {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 240px 1fr;
-            gap: 2rem;
-            transition: border-color 0.3s;
-        }
-
-        .experience-item:hover {
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        .exp-meta {
-            color: var(--text-secondary);
-        }
-
-        .exp-date {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .exp-content h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .exp-company {
-            color: var(--accent);
-            font-weight: 500;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .exp-list {
-            list-style: none;
-        }
-
-        .exp-list li {
-            position: relative;
-            padding-left: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .exp-list li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 10px;
-            width: 6px;
-            height: 6px;
-            background: var(--accent);
-            border-radius: 50%;
-        }
-
-        /* Projects */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .project-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-            background: var(--bg-accent);
-        }
-
-        .project-icon {
-            color: var(--accent);
-        }
-
-        .project-tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            background: rgba(255,255,255,0.05);
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            color: var(--text-secondary);
-        }
-
-        .project-links {
-            margin-top: auto;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .project-links a {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        /* Major Website Works */
-        .web-works {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .web-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 2.5rem;
-            display: grid;
-            grid-template-columns: 1fr 1.4fr;
-            gap: 2.5rem;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            transition: border-color 0.3s, transform 0.3s;
-        }
-
-        .web-card:hover {
-            border-color: rgba(56, 189, 248, 0.35);
-            transform: translateY(-4px);
-        }
-
-        .web-card:nth-child(even) .web-visual { order: 2; }
-
-        .web-visual {
-            background: var(--bg-accent);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            aspect-ratio: 16 / 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .web-visual::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 30% 20%, var(--accent-glow), transparent 60%);
-        }
-
-        .web-visual i { position: relative; z-index: 1; }
-
-        .web-domain {
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            color: var(--accent);
-            margin-bottom: 0.75rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .web-card h3 {
-            font-size: 1.6rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .web-tagline {
-            color: var(--text-secondary);
-            font-style: italic;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
-
-        .web-card p {
-            color: var(--text-secondary);
-            font-size: 0.98rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .web-features {
-            list-style: none;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .web-features li {
-            position: relative;
-            padding-left: 1.4rem;
-            font-size: 0.88rem;
-            color: var(--text-secondary);
-        }
-
-        .web-features li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 8px;
-            width: 5px;
-            height: 5px;
-            background: var(--success);
-            border-radius: 50%;
-        }
-
-        .web-meta-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        @media (max-width: 968px) {
-            .web-card {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-                padding: 1.75rem;
-            }
-            .web-card:nth-child(even) .web-visual { order: 0; }
-            .web-features { grid-template-columns: 1fr; }
-        }
-
-        /* Skills */
-        .skills-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .skill-group {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            padding: 1.5rem;
-            border-radius: 16px;
-        }
-
-        .skill-group h4 {
-            font-size: 0.9rem;
-            margin-bottom: 1.25rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .skill-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .skill-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .skill-item img {
-            width: 20px;
-            height: 20px;
-            filter: grayscale(1) brightness(1.5);
-            transition: filter 0.3s;
-        }
-
-        .skill-item:hover img {
-            filter: none;
-        }
-
-        /* Certifications Section */
-        .certs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 3rem;
-        }
-
-        .cert-card {
-            background: var(--bg-accent);
-            border: 1px solid var(--border);
-            padding: 1.5rem;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .cert-icon {
-            color: var(--success);
-        }
-
-        /* Footer */
-        footer {
-            padding: 4rem 0;
-            border-top: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .footer-socials {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .social-link {
-            color: var(--text-secondary);
-            transition: color 0.2s;
-        }
-
-        .social-link:hover {
-            color: var(--accent);
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 968px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 3rem;
-            }
-            .hero-desc {
-                margin: 0 auto 2.5rem;
-            }
-            .hero-actions {
-                justify-content: center;
-            }
-            .profile-card {
-                max-width: 400px;
-                margin: 0 auto;
-            }
-            .experience-item {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            .nav-links {
-                display: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammed Ashique K | Full-Stack Product Engineer &amp; Team Lead</title>
+<meta name="description" content="Muhammed Ashique K, Software Development Team Lead. Builds products end to end: Flutter mobile apps, React and Next.js web apps, NestJS backends, and AI features with LLMs and MCP. Kerala, India.">
+<meta property="og:title" content="Muhammed Ashique K | Full-Stack Product Engineer &amp; Team Lead">
+<meta property="og:description" content="Mobile, web, backend and AI, built end to end. Flutter, React, Next.js, NestJS, PostgreSQL, LLMs and MCP.">
+<meta property="og:image" content="assets/me.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#07080c">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2307080c'/><text x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' font-family='monospace' font-size='34' font-weight='700' fill='%2338bdf8'>A</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --bg:#07080c; --bg2:#0d0f15;
+  --text:#f1f5f9; --muted:#94a3b8; --dim:#64748b;
+  --sky:#38bdf8; --violet:#8b5cf6; --teal:#2dd4bf; --pink:#f472b6;
+  --glass:rgba(255,255,255,0.045); --glass-strong:rgba(255,255,255,0.075);
+  --stroke:rgba(255,255,255,0.10); --stroke-hi:rgba(255,255,255,0.22);
+  --blur:saturate(150%) blur(18px);
+  --radius:20px;
+  --font:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+::selection{background:rgba(56,189,248,.3)}
+
+/* ---------- Ambient background ---------- */
+.ambient{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;will-change:transform}
+.orb.a{width:46vw;height:46vw;left:-10vw;top:-12vw;background:radial-gradient(circle at 30% 30%,#1e3a8a,transparent 65%)}
+.orb.b{width:40vw;height:40vw;right:-12vw;top:10vh;background:radial-gradient(circle at 50% 50%,#0e7490,transparent 65%)}
+.orb.c{width:38vw;height:38vw;left:30vw;bottom:-18vw;background:radial-gradient(circle at 50% 50%,#5b21b6,transparent 65%);opacity:.4}
+.grid-lines{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(to right,rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:56px 56px;mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 75%)}
+.noise{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.cursor-glow{position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:-1;
+  background:radial-gradient(circle,rgba(56,189,248,.10),transparent 60%);transform:translate(-50%,-50%);left:50%;top:30%}
+
+/* ---------- Glass primitive ---------- */
+.glass{background:linear-gradient(145deg,var(--glass-strong),var(--glass));border:1px solid var(--stroke);
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-radius:var(--radius);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 50px -20px rgba(0,0,0,.6);position:relative}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(140deg,rgba(255,255,255,.28),transparent 35%,transparent 65%,rgba(56,189,248,.25));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+section{padding:120px 0;position:relative}
+.tag{font-family:var(--mono);font-size:.8rem;color:var(--sky);letter-spacing:.06em;display:inline-flex;gap:.5rem;align-items:center}
+.tag::before{content:"";width:22px;height:1px;background:var(--sky)}
+.h2{font-size:clamp(2rem,4.2vw,3.1rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:.6rem 0 1rem}
+.lead{color:var(--muted);max-width:640px;font-size:1.05rem}
+.grad{background:linear-gradient(100deg,var(--sky),var(--teal) 40%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- Nav ---------- */
+nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:50;width:min(1100px,calc(100% - 32px))}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 10px 22px;border-radius:999px}
+.logo{font-family:var(--mono);font-weight:700;letter-spacing:.04em}
+.logo span{color:var(--sky)}
+.nav-links{display:flex;gap:1.6rem;font-size:.9rem;color:var(--muted)}
+.nav-links a{transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:.55rem;padding:.8rem 1.4rem;border-radius:999px;font-weight:600;font-size:.95rem;transition:background .25s,border-color .25s,box-shadow .25s;will-change:transform}
+.btn-primary{background:linear-gradient(120deg,var(--sky),var(--teal));color:#04121a;box-shadow:0 10px 30px -10px rgba(56,189,248,.6)}
+.btn-primary:hover{box-shadow:0 14px 40px -8px rgba(56,189,248,.8)}
+.btn-ghost{background:var(--glass);border:1px solid var(--stroke);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur)}
+.btn-ghost:hover{border-color:var(--stroke-hi)}
+.btn-sm{padding:.55rem 1.1rem;font-size:.85rem}
+
+/* ---------- Hero ---------- */
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:120px}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:3rem;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:.55rem;padding:.45rem .9rem;border-radius:999px;font-family:var(--mono);font-size:.78rem;color:var(--sky)}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(45,212,191,.18)}
+.hero-title{font-size:clamp(2.8rem,6.6vw,5.4rem);font-weight:800;letter-spacing:-.045em;line-height:1;margin:1.4rem 0 1.4rem}
+.hero-title .line{display:block;overflow:hidden;padding-bottom:.08em}
+.hero-title .word{display:inline-block}
+.hero-desc{color:var(--muted);font-size:1.12rem;max-width:540px;margin-bottom:2rem}
+.hero-desc strong{color:var(--text);font-weight:600}
+.hero-actions{display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:2.2rem}
+.store-row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;color:var(--dim);font-size:.8rem}
+.store-chip{display:flex;align-items:center;gap:.5rem;padding:.35rem .75rem .35rem .35rem;border-radius:999px;color:var(--muted);font-size:.82rem}
+.store-chip img{width:26px;height:26px;border-radius:7px}
+
+.stage{position:relative;height:600px;perspective:1400px}
+.device{position:absolute;width:230px;border-radius:28px;overflow:hidden;border:1px solid var(--stroke-hi);
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 6px rgba(255,255,255,.03);will-change:transform}
+.device img{width:100%;height:auto}
+.device.d1{left:6%;top:70px;transform:rotateY(18deg) rotateZ(-6deg)}
+.device.d2{left:34%;top:10px;z-index:2;transform:rotateY(-4deg)}
+.device.d3{right:0;top:110px;transform:rotateY(-18deg) rotateZ(6deg)}
+.profile{position:absolute;left:0;bottom:-10px;z-index:3;width:300px;padding:1.2rem}
+.profile.glass,.float-pill.glass{background:linear-gradient(145deg,rgba(18,22,32,.86),rgba(10,12,18,.78))}
+.profile-top{display:flex;gap:.9rem;align-items:center;margin-bottom:1rem}
+.avatar{flex:none;width:76px;height:76px;border-radius:50%;padding:3px;background:conic-gradient(from 200deg,var(--sky),var(--teal),var(--violet),var(--sky));box-shadow:0 0 28px -6px rgba(56,189,248,.6)}
+.avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid #0b0e15}
+.profile-top b{display:block;font-size:.98rem;line-height:1.25}
+.profile-top small{color:var(--muted);font-size:.8rem}
+.mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.mini-stats div{background:rgba(255,255,255,.04);border:1px solid var(--stroke);border-radius:12px;padding:.55rem .6rem}
+.mini-stats b{font-size:1.15rem;color:var(--sky);display:block;line-height:1.2}
+.mini-stats span{font-size:.66rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.float-pill{position:absolute;z-index:4;display:flex;align-items:center;gap:.5rem;padding:.55rem .85rem;border-radius:14px;font-size:.8rem}
+.float-pill i{color:var(--teal)}
+.fp1{right:2%;top:30px}
+.fp2{right:8%;bottom:70px}
+
+/* ---------- Marquee ---------- */
+.marquee{padding:28px 0;border-block:1px solid var(--stroke);overflow:hidden;background:rgba(255,255,255,.015)}
+.marquee-track{display:flex;gap:3rem;width:max-content;align-items:center}
+.marquee-item{display:flex;align-items:center;gap:.6rem;color:var(--muted);font-weight:500;white-space:nowrap}
+.marquee-item img{width:22px;height:22px}
+
+/* ---------- About ---------- */
+.about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:1.5rem;margin-top:2.5rem}
+.about-card{padding:2.2rem}
+.about-card p{color:var(--muted);font-size:1.05rem;margin-bottom:1rem}
+.about-card p strong{color:var(--text)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.stat{padding:1.6rem}
+.stat b{font-size:2.6rem;font-weight:800;letter-spacing:-.03em;display:block;line-height:1}
+.stat span{color:var(--muted);font-size:.88rem}
+
+/* ---------- Highlights ---------- */
+.hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
+.hl{padding:1.7rem;transform-style:preserve-3d;transition:border-color .3s}
+.hl:hover{border-color:rgba(56,189,248,.35)}
+.hl-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:1.1rem;
+  background:linear-gradient(140deg,rgba(56,189,248,.22),rgba(139,92,246,.18));border:1px solid var(--stroke);color:var(--sky)}
+.hl h3{font-size:1.1rem;margin-bottom:.9rem;letter-spacing:-.01em}
+.hl dl{display:grid;gap:.35rem;font-size:.9rem;color:var(--muted)}
+.hl dt{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sky);margin-top:.35rem}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.1rem}
+.chip{font-family:var(--mono);font-size:.72rem;padding:.25rem .6rem;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--stroke);color:var(--muted)}
+
+/* ---------- Work showcase ---------- */
+.show>div{min-width:0}
+.show{display:grid;grid-template-columns:.9fr 1.1fr;gap:2.5rem;align-items:center;padding:2.2rem;margin-top:2.5rem;overflow:hidden}
+.show-head{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}
+.show-head img{width:54px;height:54px;border-radius:14px;border:1px solid var(--stroke-hi)}
+.show-head h3{font-size:1.6rem;letter-spacing:-.02em}
+.show-head small{font-family:var(--mono);color:var(--dim);font-size:.78rem}
+.show-tagline{font-style:italic;color:var(--sky);margin-bottom:.8rem}
+.show p{color:var(--muted);margin-bottom:1rem}
+.show p strong{color:var(--text)}
+.feat{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.45rem .9rem;margin:1rem 0 1.3rem;font-size:.9rem;color:var(--muted)}
+.feat li{display:flex;gap:.45rem;align-items:flex-start}
+.feat li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--teal);margin-top:.55rem}
+.links{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.3rem}
+.rail{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.5rem .2rem 1.2rem;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent;cursor:grab}
+.rail::-webkit-scrollbar{height:6px}.rail::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:9px}
+.shot{flex:none;width:210px;scroll-snap-align:start;border-radius:22px;overflow:hidden;border:1px solid var(--stroke-hi);box-shadow:0 25px 50px -25px rgba(0,0,0,.8);transition:transform .35s}
+.shot:hover{transform:translateY(-6px)}
+.shot img{width:100%;height:auto;pointer-events:none}
+.rail-hint{font-family:var(--mono);font-size:.72rem;color:var(--dim);display:flex;gap:.4rem;align-items:center}
+.web-visual{aspect-ratio:16/10;border-radius:16px;border:1px solid var(--stroke);position:relative;overflow:hidden;
+  background:radial-gradient(circle at 25% 30%,rgba(56,189,248,.35),transparent 45%),radial-gradient(circle at 75% 70%,rgba(139,92,246,.35),transparent 50%),#0b0d13}
+.browser-bar{display:flex;gap:6px;padding:12px 14px;border-bottom:1px solid var(--stroke)}
+.browser-bar span{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.18)}
+.wv-body{padding:2rem;display:grid;gap:.8rem}
+.wv-line{height:12px;border-radius:6px;background:rgba(255,255,255,.12)}
+.wv-big{font-size:2rem;font-weight:800;letter-spacing:-.03em}
+
+/* ---------- Experience ---------- */
+.timeline{position:relative;margin-top:3rem;padding-left:34px}
+.tl-track{position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:var(--stroke);border-radius:2px}
+.tl-fill{position:absolute;left:8px;top:8px;width:2px;height:calc(100% - 16px);background:linear-gradient(var(--sky),var(--violet));transform-origin:top;border-radius:2px}
+.job{position:relative;padding:1.6rem 1.8rem;margin-bottom:1.25rem}
+.job::after{content:"";position:absolute;left:-32px;top:2rem;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--sky);box-shadow:0 0 0 4px rgba(56,189,248,.12)}
+.job-top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:baseline}
+.job h3{font-size:1.15rem}
+.job .co{color:var(--sky);font-weight:500;font-size:.95rem}
+.job time{font-family:var(--mono);font-size:.78rem;color:var(--dim)}
+.job ul{margin:.9rem 0 0 1.1rem;color:var(--muted);font-size:.95rem;display:grid;gap:.35rem}
+.now{font-family:var(--mono);font-size:.7rem;color:var(--teal);border:1px solid rgba(45,212,191,.35);border-radius:999px;padding:.1rem .55rem;margin-left:.5rem}
+
+/* ---------- Skills ---------- */
+.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:3rem}
+.skill-group{padding:1.6rem}
+.skill-group h4{font-family:var(--mono);font-size:.78rem;color:var(--sky);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem}
+.skill-list{display:flex;flex-wrap:wrap;gap:.5rem}
+.skill{display:flex;align-items:center;gap:.45rem;padding:.45rem .75rem;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--stroke);font-size:.88rem;transition:border-color .2s,background .2s}
+.skill:hover{border-color:var(--stroke-hi);background:rgba(255,255,255,.07)}
+.skill img{width:16px;height:16px}
+
+/* ---------- Beyond ---------- */
+.beyond{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
+.mini{padding:1.5rem}
+.mini .tag{margin-bottom:.8rem}
+.mini h3{font-size:1.05rem;margin-bottom:.25rem}
+.mini p{color:var(--muted);font-size:.9rem}
+.mini + .mini{}
+.cert{display:flex;gap:.7rem;align-items:center;padding:.6rem 0;border-top:1px solid var(--stroke);font-size:.9rem}
+.cert:first-of-type{border-top:0}
+.cert i{color:var(--teal);flex:none}
+.cert small{display:block;color:var(--dim);font-size:.78rem}
+
+/* ---------- Contact ---------- */
+.cta{padding:3.5rem;text-align:center;overflow:hidden}
+.cta .h2{max-width:720px;margin-inline:auto}
+.cta .lead{margin:0 auto 2rem}
+.cta-actions{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap}
+.copied{font-family:var(--mono);font-size:.78rem;color:var(--teal);height:1.2rem;margin-top:1rem}
+footer{padding:2.5rem 0 3rem;color:var(--dim);font-size:.85rem}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.socials{display:flex;gap:.6rem}
+.socials a{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--muted);transition:color .2s,border-color .2s}
+.socials a:hover{color:var(--sky)}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1024px){
+  .hero-grid{grid-template-columns:1fr}
+  .stage{height:560px;max-width:560px;margin:0 auto;width:100%}
+  .hl-grid,.skills,.beyond{grid-template-columns:1fr 1fr}
+  .show{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr}
+}
+@media (max-width:700px){
+  section{padding:84px 0}
+  .nav-links{display:none}
+  .hl-grid,.skills,.beyond{grid-template-columns:1fr}
+  .feat{grid-template-columns:1fr}
+  .stage{height:470px}
+  .device{width:165px;border-radius:20px}
+  .device.d1{left:0;top:40px}.device.d2{left:27%;top:0}.device.d3{right:0;top:60px}
+  .profile{width:260px;left:50%;transform:translateX(-50%);bottom:0}
+  .fp1,.fp2{display:none}
+  .show,.about-card,.cta{padding:1.4rem}
+  .shot{width:170px}
+  .cta{padding:2.2rem 1.4rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important}
+}
+</style>
 </head>
 <body>
+<div class="ambient"><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div></div>
+<div class="grid-lines"></div><div class="noise"></div><div class="cursor-glow" aria-hidden="true"></div>
 
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
+<nav>
+  <div class="nav-inner glass">
+    <a href="#hero" class="logo">ASHIQUE<span>.</span></a>
+    <div class="nav-links">
+      <a href="#about">About</a><a href="#highlights">Highlights</a><a href="#work">Work</a><a href="#experience">Experience</a><a href="#skills">Skills</a>
+    </div>
+    <a href="#contact" class="btn btn-primary btn-sm magnetic">Get in touch</a>
+  </div>
+</nav>
 
-    <nav id="navbar">
-        <div class="container nav-content">
-            <a href="#" class="logo">ASHIQUE<span>.</span></a>
-            <div class="nav-links">
-                <a href="#about">About</a>
-                <a href="#experience">Experience</a>
-                <a href="#education">Education</a>
-                <a href="#work">Work</a>
-                <a href="#skills">Skills</a>
-                <a href="#mentoring">Mentoring</a>
-            </div>
-            <a href="https://wa.me/917012747208" class="contact-btn">Get in touch</a>
-        </div>
-    </nav>
-
-    <div class="container">
-        
-        <!-- Hero Section -->
-        <section id="hero">
-            <div class="hero-grid">
-                <div class="hero-text">
-                    <div class="hero-badge hero-anim" style="--reveal-delay: 0.05s;">
-                        <i data-lucide="zap" size="14"></i> Senior Software Engineer & Team Lead
-                    </div>
-                    <h1 class="hero-title hero-anim" style="--reveal-delay: 0.15s;">
-                        Muhammed <span>Ashique K.</span>
-                    </h1>
-                    <p class="hero-desc hero-anim" style="--reveal-delay: 0.25s;">
-                        Engineering scalable <strong>Flutter</strong>, <strong>React</strong>, and <strong>NestJS</strong> ecosystems. I bridge the gap between complex business logic and intuitive user experiences.
-                    </p>
-                    <div class="hero-actions hero-anim" style="--reveal-delay: 0.35s;">
-                        <a href="https://wa.me/917012747208" class="btn btn-primary">
-                            <i data-lucide="message-square" size="18"></i> Hire Me
-                        </a>
-                        <a href="#work" class="btn btn-secondary">
-                            Explore Work
-                        </a>
-                    </div>
-                </div>
-
-                <div class="profile-card hero-anim" style="--reveal-delay: 0.45s;">
-                    <div class="profile-img-wrap">
-                        <img src="me.png" alt="Muhammed Ashique">
-                    </div>
-                    <h2 style="font-size: 1.5rem; margin-bottom: 0.25rem;">Software Development Team Lead</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">@ Procube.cx</p>
-                    
-                    <div class="card-stats">
-                        <div class="stat-item">
-                            <div class="stat-val">5+</div>
-                            <div class="stat-lbl">Years Exp</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-val">12+</div>
-                            <div class="stat-lbl">Apps Live</div>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: var(--text-secondary);">
-                            <i data-lucide="mail" size="16"></i> hashofficial98@gmail.com
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: var(--text-secondary);">
-                            <i data-lucide="map-pin" size="16"></i> Wayanad, Kerala
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about">
-            <span class="section-tag reveal">// About</span>
-            <h2 class="section-title reveal" style="--reveal-delay: 0.05s;">Who I Am</h2>
-            <div class="about-grid" data-stagger>
-                <p class="about-lead reveal">
-                    I'm a Senior Software Developer and Team Lead with 5+ years building
-                    production-grade web and mobile products end to end. I lead
-                    cross-functional teams, architect scalable backends, and ship polished
-                    cross-platform apps that real businesses run on every day.
-                </p>
-                <p class="about-lead reveal">
-                    My core stack is <strong>Flutter</strong> for mobile,
-                    <strong>React / Next.js</strong> on the web, and
-                    <strong>NestJS + Prisma + PostgreSQL</strong> on the backend. I care
-                    about clean architecture, code quality, and mentoring the developers
-                    around me.
-                    <!-- LINKEDIN TODO: paste exact "About" summary, education, and any
-                         awards/honors here for full accuracy. -->
-                </p>
-            </div>
-        </section>
-
-        <!-- Experience Section -->
-        <section id="experience">
-            <span class="section-tag reveal">// Professional Journey</span>
-            <h2 class="section-title reveal" style="--reveal-delay: 0.05s;">Career Milestones</h2>
-            
-            <div class="timeline" data-stagger>
-                <div class="experience-item reveal reveal--left">
-                    <div class="exp-meta">
-                        <span class="exp-date">MAY 2023 — PRESENT</span>
-                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;">
-                            <span style="color: var(--success);">●</span> Current Role
-                        </div>
-                    </div>
-                    <div class="exp-content">
-                        <h3>Software Development Team Lead</h3>
-                        <a href="https://procube.cx" class="exp-company">Procube.cx</a>
-                        <ul class="exp-list">
-                            <li>Leading cross-functional teams to deliver enterprise-grade web and mobile solutions for global clients.</li>
-                            <li>Architecting high-performance backend systems using NestJS, Prisma, and PostgreSQL.</li>
-                            <li>Defining technical standards, conducting rigorous code reviews, and mentoring senior/junior devs.</li>
-                            <li>Spearheading the migration to modern microservices and Flutter-based mobile ecosystems.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="experience-item reveal reveal--left">
-                    <div class="exp-meta">
-                        <span class="exp-date">FEB 2022 — APR 2023</span>
-                    </div>
-                    <div class="exp-content">
-                        <h3>Software Engineer</h3>
-                        <span class="exp-company">Lithos Technosoft Pvt. Ltd.</span>
-                        <ul class="exp-list">
-                            <li>Core Flutter developer for enterprise POS (Point of Sale) and Logistics applications.</li>
-                            <li>Implemented robust offline-first synchronization using local databases and BLoC.</li>
-                            <li>Collaborated directly with stakeholders to translate business requirements into technical blueprints.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="experience-item reveal reveal--left">
-                    <div class="exp-meta">
-                        <span class="exp-date">DEC 2021 — FEB 2022</span>
-                    </div>
-                    <div class="exp-content">
-                        <h3>Software Engineer Intern</h3>
-                        <span class="exp-company">Johnsys Solutions Pvt. Ltd.</span>
-                        <ul class="exp-list">
-                            <li>Completed a 3-month internship as a Software Developer, gaining hands-on production experience.</li>
-                            <li>Built front-end features with HTML, CSS, JavaScript, React, and Flutter.</li>
-                            <li>Designed and implemented RESTful APIs for seamless front-end / back-end communication.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="experience-item reveal reveal--left">
-                    <div class="exp-meta">
-                        <span class="exp-date">DEC 2020 — PRESENT</span>
-                    </div>
-                    <div class="exp-content">
-                        <h3>Freelance Flutter Developer</h3>
-                        <span class="exp-company">Zantida, UK</span>
-                        <ul class="exp-list">
-                            <li>Delivering cross-platform front-end development using Flutter for international clients.</li>
-                            <li>Building and maintaining responsive, production-ready mobile UIs.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Education Section -->
-        <section id="education">
-            <span class="section-tag reveal">// Academics</span>
-            <h2 class="section-title reveal" style="--reveal-delay: 0.05s;">Education</h2>
-            <div class="timeline" data-stagger>
-                <div class="experience-item reveal reveal--left">
-                    <div class="exp-meta">
-                        <span class="exp-date">2016 — 2020</span>
-                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;">
-                            <i data-lucide="graduation-cap" size="16"></i> B.Tech
-                        </div>
-                    </div>
-                    <div class="exp-content">
-                        <h3>Bachelor of Technology in Information Technology</h3>
-                        <span class="exp-company">School of Engineering, CUSAT</span>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                            Cochin University of Science and Technology — core CS foundations:
-                            data structures, databases, networks, and software engineering.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Major Website Works -->
-        <section id="work">
-            <span class="section-tag reveal">// Major Website Works</span>
-            <h2 class="section-title reveal" style="--reveal-delay: 0.05s;">Live Platforms I Built</h2>
-
-            <div class="web-works" data-stagger>
-
-                <!-- Zentid -->
-                <div class="web-card reveal reveal--scale">
-                    <div class="web-visual"><i data-lucide="radar" size="56"></i></div>
-                    <div class="web-info">
-                        <span class="web-domain"><i data-lucide="globe" size="14"></i> zentid.com</span>
-                        <h3>Zentid</h3>
-                        <p class="web-tagline">"Stop running your field operations on guesswork."</p>
-                        <p>
-                            A WhatsApp-native Field Service Management (FSM) platform for service
-                            teams across the MENA region. I led the architecture across three
-                            connected apps — <strong>Zentid Field</strong> (technicians),
-                            <strong>Zentid Manage</strong> (operations), and
-                            <strong>Zentid Connect</strong> (customer booking).
-                        </p>
-                        <ul class="web-features">
-                            <li>Real-time job scheduling &amp; live tracking</li>
-                            <li>WhatsApp-native field coordination</li>
-                            <li>AMC &amp; contract management</li>
-                            <li>Automated timesheets &amp; billing</li>
-                            <li>Inventory &amp; parts tracking</li>
-                            <li>Smart operations dashboard</li>
-                        </ul>
-                        <div class="web-meta-row">
-                            <div class="project-tags">
-                                <span class="tag">Flutter</span><span class="tag">NestJS</span><span class="tag">Node.js</span><span class="tag">PostgreSQL</span><span class="tag">WhatsApp API</span>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://zentid.com/" target="_blank" rel="noopener"><i data-lucide="external-link" size="16"></i> Visit Site</a>
-                                <a href="https://apps.apple.com/in/app/zentid-manage-admin-app/id6748403970" target="_blank" rel="noopener"><i data-lucide="apple" size="16"></i> iOS App</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Petbey -->
-                <div class="web-card reveal reveal--scale">
-                    <div class="web-visual"><i data-lucide="paw-print" size="56"></i></div>
-                    <div class="web-info">
-                        <span class="web-domain"><i data-lucide="globe" size="14"></i> petbey.in</span>
-                        <h3>Petbey</h3>
-                        <p class="web-tagline">"Every tail deserves a safe place to rehome."</p>
-                        <p>
-                            A mobile-first marketplace for safe pet rehoming and adoption,
-                            connecting verified owners and adopters. I led the cross-platform
-                            Flutter app and the scalable NestJS / Prisma backend powering
-                            listings, messaging, and the Petspace dashboard.
-                        </p>
-                        <ul class="web-features">
-                            <li>Verified user profiles for safety</li>
-                            <li>Petspace management dashboard</li>
-                            <li>Real-time direct messaging</li>
-                            <li>Pet journey &amp; milestone tracking</li>
-                            <li>Multi-pet listings &amp; categories</li>
-                            <li>Profile reporting system</li>
-                        </ul>
-                        <div class="web-meta-row">
-                            <div class="project-tags">
-                                <span class="tag">Flutter</span><span class="tag">NestJS</span><span class="tag">Prisma</span><span class="tag">PostgreSQL</span><span class="tag">Google Maps API</span>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://www.petbey.in/" target="_blank" rel="noopener"><i data-lucide="external-link" size="16"></i> Visit Site</a>
-                                <a href="https://apps.apple.com/us/app/petbey-where-pets-find-homes/id6477542468" target="_blank" rel="noopener"><i data-lucide="apple" size="16"></i> iOS App</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Procube -->
-                <div class="web-card reveal reveal--scale">
-                    <div class="web-visual"><i data-lucide="layout-dashboard" size="56"></i></div>
-                    <div class="web-info">
-                        <span class="web-domain"><i data-lucide="globe" size="14"></i> procube.cx</span>
-                        <h3>Procube</h3>
-                        <p class="web-tagline">"Your digital partner."</p>
-                        <p>
-                            The digital studio where I lead software delivery — building web
-                            platforms and custom technology solutions for global clients. I own
-                            the technical standards, architecture decisions, and code-review
-                            culture across the team's web and mobile projects.
-                        </p>
-                        <ul class="web-features">
-                            <li>Custom web platform development</li>
-                            <li>End-to-end technology solutions</li>
-                            <li>Scalable backend architecture</li>
-                            <li>Cross-functional team leadership</li>
-                        </ul>
-                        <div class="web-meta-row">
-                            <div class="project-tags">
-                                <span class="tag">React</span><span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">NestJS</span><span class="tag">Cloud</span>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://www.procube.cx/" target="_blank" rel="noopener"><i data-lucide="external-link" size="16"></i> Visit Site</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Skills Section -->
-        <section id="skills">
-            <span class="section-tag reveal">// Technical Stack</span>
-            <h2 class="section-title reveal" style="--reveal-delay: 0.05s;">Core Competencies</h2>
-
-            <div class="skills-section" data-stagger>
-                <div class="skill-group reveal">
-                    <h4>Frontend / Mobile</h4>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <img src="https://cdn.simpleicons.org/flutter/02569B" alt="Flutter"> <span>Flutter (BLoC, Provider)</span>
-                        </div>
-                        <div class="skill-item">
-                            <img src="https://cdn.simpleicons.org/react/61DAFB" alt="React"> <span>React & Next.js</span>
-                        </div>
-                        <div class="skill-item">
-                            <img src="https://cdn.simpleicons.org/typescript/3178C6" alt="TypeScript"> <span>TypeScript (Expert)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-group reveal">
-                    <h4>Backend / Cloud</h4>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <img src="https://cdn.simpleicons.org/nestjs/E0234E" alt="NestJS"> <span>NestJS & Node.js</span>
-                        </div>
-                        <div class="skill-item">
-                            <img src="https://cdn.simpleicons.org/firebase/FFCA28" alt="Firebase"> <span>Firebase Services</span>
-                        </div>
-                        <div class="skill-item">
-                            <img src="https://cdn.simpleicons.org/googlecloud/4285F4" alt="Cloud"> <span>Cloud Deployment</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-group reveal">
-                    <h4>Database / ORM</h4>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="PostgreSQL"> <span>PostgreSQL</span>
-                        </div>
-                        <div class="skill-item">
-                            <img src="https://cdn.simpleicons.org/prisma/2D3748" alt="Prisma"> <span>Prisma ORM</span>
-                        </div>
-                        <div class="skill-item">
-                            <img src="https://cdn.simpleicons.org/mongodb/47A248" alt="MongoDB"> <span>MongoDB</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="certs-grid" data-stagger>
-                <div class="cert-card reveal reveal--scale">
-                    <div class="cert-icon"><i data-lucide="award" size="24"></i></div>
-                    <div>
-                        <div style="font-size: 0.95rem; font-weight: 600;">HTML/CSS Specialist</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Advanced UI Development Bootcamp</div>
-                    </div>
-                </div>
-                <div class="cert-card reveal reveal--scale">
-                    <div class="cert-icon"><i data-lucide="award" size="24"></i></div>
-                    <div>
-                        <div style="font-size: 0.95rem; font-weight: 600;">ML & OpenCV</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Computer Vision Fundamentals</div>
-                    </div>
-                </div>
-                <div class="cert-card reveal reveal--scale">
-                    <div class="cert-icon"><i data-lucide="award" size="24"></i></div>
-                    <div>
-                        <div style="font-size: 0.95rem; font-weight: 600;">Digital Marketing</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Strategic Growth & SEO</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Mentoring Section -->
-        <section id="mentoring">
-            <span class="section-tag reveal">// Community & Leadership</span>
-            <h2 class="section-title reveal" style="--reveal-delay: 0.05s;">Mentoring & Impact</h2>
-            <div class="timeline" data-stagger>
-                <div class="experience-item reveal reveal--left">
-                    <div class="exp-meta">
-                        <span class="exp-date">MINDEMPOWERED NGO</span>
-                    </div>
-                    <div class="exp-content">
-                        <h3>Internship Mentor</h3>
-                        <p style="color: var(--text-secondary);">Structuring technical roadmaps for interns, focusing on industry readiness and core software principles.</p>
-                    </div>
-                </div>
-                <div class="experience-item reveal reveal--left">
-                    <div class="exp-meta">
-                        <span class="exp-date">BROTOTYPE</span>
-                    </div>
-                    <div class="exp-content">
-                        <h3>Architecture Reviewer</h3>
-                        <p style="color: var(--text-secondary);">Providing high-level design reviews for complex student projects, ensuring scalability and performance.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+<main>
+<!-- HERO -->
+<section id="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="badge glass hero-in"><span class="dot"></span>Team Lead · Mobile · Web · Backend · AI</div>
+      <h1 class="hero-title">
+        <span class="line"><span class="word">Muhammed</span></span>
+        <span class="line"><span class="word grad">Ashique K.</span></span>
+      </h1>
+      <p class="hero-desc hero-in">I build products end to end: <strong>Flutter</strong> mobile apps, <strong>React and Next.js</strong> web apps and sites, <strong>NestJS + PostgreSQL</strong> backends, and <strong>AI features</strong> powered by LLMs. Currently leading engineering on Zentid, a multi-tenant field-service platform.</p>
+      <div class="hero-actions hero-in">
+        <a href="#contact" class="btn btn-primary magnetic"><i data-lucide="message-square" width="18" height="18"></i>Let's talk</a>
+        <a href="#work" class="btn btn-ghost magnetic">See my work <i data-lucide="arrow-down-right" width="18" height="18"></i></a>
+      </div>
+      <div class="store-row hero-in">
+        <span>Live on the App Store:</span>
+        <a class="store-chip glass" href="https://apps.apple.com/in/app/id6745864788" target="_blank" rel="noopener"><img src="assets/zentid-field-icon.jpg" alt="">Zentid Field</a>
+        <a class="store-chip glass" href="https://apps.apple.com/in/app/zentid-manage-admin-app/id6748403970" target="_blank" rel="noopener"><img src="assets/zentid-manage-icon.jpg" alt="">Zentid Manage</a>
+        <a class="store-chip glass" href="https://apps.apple.com/us/app/petbey-where-pets-find-homes/id6477542468" target="_blank" rel="noopener"><img src="assets/petbey-icon.jpg" alt="">Petbey</a>
+      </div>
     </div>
 
-
-    <footer>
-        <div class="container">
-            <div class="footer-socials">
-                <a href="https://www.linkedin.com/in/muhammed-ashique-k-7996b016b/" class="social-link"><i data-lucide="linkedin"></i></a>
-                <a href="mailto:hashofficial98@gmail.com" class="social-link"><i data-lucide="mail"></i></a>
-                <a href="https://wa.me/917012747208" class="social-link"><i data-lucide="message-circle"></i></a>
-            </div>
-            <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                &copy; <span id="year"></span> Muhammed Ashique K. Designed with modern engineering in mind.
-            </p>
+    <div class="stage" id="stage">
+      <div class="device d1" data-depth="0.6"><img src="assets/zentid-field-2.jpg" alt="Zentid Field app: work progress with photo upload"></div>
+      <div class="device d2" data-depth="1"><img src="assets/zentid-field-1.jpg" alt="Zentid Field app: technician home and schedule"></div>
+      <div class="device d3" data-depth="0.6"><img src="assets/petbey-1.jpg" alt="Petbey app: pet marketplace"></div>
+      <div class="float-pill glass fp1" data-depth="1.4"><i data-lucide="wifi-off" width="16" height="16"></i>Works offline, syncs later</div>
+      <div class="float-pill glass fp2" data-depth="1.6"><i data-lucide="sparkles" width="16" height="16"></i>AI assistant with MCP tools</div>
+      <div class="profile glass" data-depth="1.2">
+        <div class="profile-top">
+          <div class="avatar"><img src="assets/me.jpg" alt="Muhammed Ashique K"></div>
+          <div><b>Software Development Team Lead</b><small>@ Procube.cx · Kerala, India</small></div>
         </div>
-    </footer>
+        <div class="mini-stats">
+          <div><b><span class="count" data-to="5">5</span>+</b><span>Years</span></div>
+          <div><b><span class="count" data-to="12">12</span>+</b><span>Apps live</span></div>
+          <div><b><span class="count" data-to="3">3</span></b><span>On App Store</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+<!-- MARQUEE -->
+<div class="marquee" aria-label="Technologies">
+  <div class="marquee-track">
+    <!-- items injected by script (duplicated for seamless loop) -->
+  </div>
+</div>
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
-        });
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <span class="tag reveal">About</span>
+    <h2 class="h2 reveal">Mobile, web, backend and AI,<br><span class="grad">built by the same hands.</span></h2>
+    <div class="about-grid">
+      <div class="about-card glass reveal">
+        <p>I'm a Software Development Team Lead with 5+ years shipping web and mobile products end to end. I work across the whole product: the mobile app in the field, the web dashboard in the office, the marketing site, the API and database underneath, and lately the AI assistant on top.</p>
+        <p>My stack: <strong>Flutter</strong> (BLoC, Hive, Dio) for mobile; <strong>React, Next.js, TanStack Router and Tailwind</strong> for web apps and sites; <strong>NestJS, Prisma, PostgreSQL and Redis</strong> on the backend; and the <strong>Vercel AI SDK, LLM tool calling and MCP</strong> for AI features. I lead a team of engineers, run code review and releases, and write architecture decision records so the codebase stays consistent as it grows.</p>
+      </div>
+      <div class="stats">
+        <div class="stat glass reveal"><b class="grad"><span class="count" data-to="5">5</span>+</b><span>years building production software</span></div>
+        <div class="stat glass reveal"><b class="grad"><span class="count" data-to="3">3</span></b><span>apps on the App Store I built</span></div>
+        <div class="stat glass reveal"><b class="grad"><span class="count" data-to="4">4</span></b><span>layers I ship: mobile, web, backend, AI</span></div>
+        <div class="stat glass reveal"><b class="grad"><span class="count" data-to="12">12</span>+</b><span>apps live across clients</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Current year
-        document.getElementById('year').textContent = new Date().getFullYear();
+<!-- HIGHLIGHTS -->
+<section id="highlights">
+  <div class="container">
+    <span class="tag reveal">Engineering highlights</span>
+    <h2 class="h2 reveal">Problems I've solved</h2>
+    <p class="lead reveal">Real problems from production apps, what I built, and what changed.</p>
+    <div class="hl-grid">
+      <article class="hl glass tilt">
+        <div class="hl-icon"><i data-lucide="refresh-cw" width="20" height="20"></i></div>
+        <h3>Offline-first work sync</h3>
+        <dl><dt>Problem</dt><dd>Technicians record check-ins, photos and completed work on sites with no signal.</dd>
+        <dt>What I built</dt><dd>A Hive-backed outbox stores every action against the visit it was recorded on, then replays it in stages with a progress bar when the network returns.</dd>
+        <dt>Result</dt><dd>Work posts to the right visit even on multi-day jobs; I fixed a bug where replay used to attach a day's work to the wrong visit.</dd></dl>
+        <div class="chips"><span class="chip">Flutter</span><span class="chip">BLoC</span><span class="chip">Hive</span><span class="chip">Dio</span></div>
+      </article>
+      <article class="hl glass tilt">
+        <div class="hl-icon"><i data-lucide="camera" width="20" height="20"></i></div>
+        <h3>Evidence-grade photo pipeline</h3>
+        <dl><dt>Problem</dt><dd>Clients need proof of where and when work was done.</dd>
+        <dt>What I built</dt><dd>A camera service compresses each shot and stamps it with time, GPS and a reverse-geocoded address, keeping originals private and uploading only the final JPEG.</dd>
+        <dt>Result</dt><dd>Photos double as audit evidence in service reports and invoices.</dd></dl>
+        <div class="chips"><span class="chip">Flutter</span><span class="chip">camera</span><span class="chip">geolocator</span></div>
+      </article>
+      <article class="hl glass tilt">
+        <div class="hl-icon"><i data-lucide="lock" width="20" height="20"></i></div>
+        <h3>Race-safe job claiming</h3>
+        <dl><dt>Problem</dt><dd>Shared jobs were being claimed by two people at once.</dd>
+        <dt>What I built</dt><dd>Replaced a read-then-write path with one conditional update under a per-job Postgres advisory lock; the loser gets a clear 409, and an owner re-checking in is a no-op for offline replay.</dd>
+        <dt>Result</dt><dd>No more double-assigned visits.</dd></dl>
+        <div class="chips"><span class="chip">NestJS</span><span class="chip">PostgreSQL</span><span class="chip">Prisma</span></div>
+      </article>
+      <article class="hl glass tilt">
+        <div class="hl-icon"><i data-lucide="key-round" width="20" height="20"></i></div>
+        <h3>Token refresh under load</h3>
+        <dl><dt>Problem</dt><dd>Many requests failing with 401 at once each tried to refresh the session.</dd>
+        <dt>What I built</dt><dd>A refresh coordinator in the Dio client lets the first 401 refresh and makes the rest wait for it, then retries them with the new token.</dd>
+        <dt>Result</dt><dd>One refresh per expiry, no random logouts.</dd></dl>
+        <div class="chips"><span class="chip">Dart</span><span class="chip">Dio</span><span class="chip">Interceptors</span></div>
+      </article>
+      <article class="hl glass tilt">
+        <div class="hl-icon"><i data-lucide="building-2" width="20" height="20"></i></div>
+        <h3>Multi-tenant platform</h3>
+        <dl><dt>Problem</dt><dd>Each customer company needs its data fully isolated.</dd>
+        <dt>What I built</dt><dd>Schema-per-tenant PostgreSQL with a Prisma client per tenant, plus a queue-driven onboarding job that creates the schema, seeds defaults and activates the account.</dd>
+        <dt>Result</dt><dd>New tenants go live without manual setup.</dd></dl>
+        <div class="chips"><span class="chip">PostgreSQL</span><span class="chip">Prisma</span><span class="chip">BullMQ</span><span class="chip">Redis</span></div>
+      </article>
+      <article class="hl glass tilt">
+        <div class="hl-icon"><i data-lucide="message-circle" width="20" height="20"></i></div>
+        <h3>WhatsApp service intake</h3>
+        <dl><dt>Problem</dt><dd>Customers message on WhatsApp; staff used to retype every request.</dd>
+        <dt>What I built</dt><dd>A Redis-backed conversation state machine on the Meta Cloud API turns messages, photos and location pins into service requests, matches the sender to a client by phone, and caps spam.</dd>
+        <dt>Result</dt><dd>Requests reach the office with no manual entry.</dd></dl>
+        <div class="chips"><span class="chip">NestJS</span><span class="chip">Redis</span><span class="chip">WhatsApp API</span></div>
+      </article>
+      <article class="hl glass tilt">
+        <div class="hl-icon"><i data-lucide="sparkles" width="20" height="20"></i></div>
+        <h3>AI assistant with real tools</h3>
+        <dl><dt>Problem</dt><dd>Office staff wanted to ask questions and create records in plain language instead of clicking through screens.</dd>
+        <dt>What I built</dt><dd>A streaming chat service on the Vercel AI SDK, plus an MCP server that exposes the platform's own APIs (clients, contracts, quotations, tasks) as tools the model can call, with a preview-then-confirm step before anything changes.</dd>
+        <dt>Result</dt><dd>Users get answers and drafts inside the dashboard, and every write still goes through the same permissions as the app.</dd></dl>
+        <div class="chips"><span class="chip">Vercel AI SDK</span><span class="chip">MCP</span><span class="chip">LLM tool calling</span><span class="chip">SSE</span></div>
+      </article>
+      <article class="hl glass tilt">
+        <div class="hl-icon"><i data-lucide="layout-dashboard" width="20" height="20"></i></div>
+        <h3>Web apps people work in all day</h3>
+        <dl><dt>Problem</dt><dd>Operations teams and their customers each needed their own web app on the same data.</dd>
+        <dt>What I built</dt><dd>The operations dashboard and a separate client portal in React 19 with TanStack Router, React Query, Zustand and Tailwind, sharing typed API clients generated from the backend's DTOs.</dd>
+        <dt>Result</dt><dd>Two web apps on one API, with schema drift caught in CI before it reaches users.</dd></dl>
+        <div class="chips"><span class="chip">React</span><span class="chip">TanStack</span><span class="chip">React Query</span><span class="chip">Tailwind</span></div>
+      </article>
+      <article class="hl glass tilt">
+        <div class="hl-icon"><i data-lucide="globe" width="20" height="20"></i></div>
+        <h3>Fast sites at the edge</h3>
+        <dl><dt>Problem</dt><dd>The product needed a marketing site, docs, and a public booking form that strangers could use safely.</dd>
+        <dt>What I built</dt><dd>A Next.js marketing site, a static docs site, and a booking form served from Cloudflare Workers, with layered spam limits and photos re-encoded server-side to strip location data.</dd>
+        <dt>Result</dt><dd>Fast public pages, and a form that can't be abused to flood the system.</dd></dl>
+        <div class="chips"><span class="chip">Next.js</span><span class="chip">Static sites</span><span class="chip">Cloudflare Workers</span></div>
+      </article>
+    </div>
+  </div>
+</section>
 
-        // ===== Standardized scroll-reveal animations =====
-        // Auto-assign stagger delays to .reveal children inside [data-stagger] groups
-        document.querySelectorAll('[data-stagger]').forEach(group => {
-            group.querySelectorAll(':scope > .reveal').forEach((el, i) => {
-                // don't override an explicitly-set delay
-                if (!el.style.getPropertyValue('--reveal-delay')) {
-                    el.style.setProperty('--reveal-delay', (i * 0.1) + 's');
-                }
-            });
-        });
+<!-- WORK -->
+<section id="work">
+  <div class="container">
+    <span class="tag reveal">Selected work</span>
+    <h2 class="h2 reveal">Products in people's hands</h2>
+    <p class="lead reveal">Screens below are from the live App Store listings.</p>
 
-        const revealObserver = new IntersectionObserver((entries, obs) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    obs.unobserve(entry.target); // reveal once, then stop watching
-                }
-            });
-        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    <div class="show glass reveal">
+      <div>
+        <div class="show-head"><img src="assets/zentid-field-icon.jpg" alt="Zentid icon"><div><h3>Zentid</h3><small>zentid.com · Field + Manage apps</small></div></div>
+        <p class="show-tagline">"Stop running your field operations on guesswork."</p>
+        <p>A WhatsApp-native Field Service Management platform for service teams across the MENA region. I lead the architecture across connected apps: <strong>Zentid Field</strong> for technicians, <strong>Zentid Manage</strong> for operations, and <strong>Zentid Connect</strong> for customer booking.</p>
+        <ul class="feat"><li>Scheduling &amp; live tracking</li><li>WhatsApp job updates</li><li>Offline work progress</li><li>Client feedback reports</li><li>AMC &amp; contracts</li><li>Timesheets &amp; billing</li></ul>
+        <div class="chips"><span class="chip">Flutter</span><span class="chip">NestJS</span><span class="chip">PostgreSQL</span><span class="chip">Redis</span><span class="chip">WhatsApp API</span></div>
+        <div class="links">
+          <a class="btn btn-ghost btn-sm magnetic" href="https://zentid.com/" target="_blank" rel="noopener"><i data-lucide="globe" width="16" height="16"></i>Website</a>
+          <a class="btn btn-ghost btn-sm magnetic" href="https://apps.apple.com/in/app/id6745864788" target="_blank" rel="noopener"><i data-lucide="apple" width="16" height="16"></i>Field app</a>
+          <a class="btn btn-ghost btn-sm magnetic" href="https://apps.apple.com/in/app/zentid-manage-admin-app/id6748403970" target="_blank" rel="noopener"><i data-lucide="apple" width="16" height="16"></i>Manage app</a>
+        </div>
+      </div>
+      <div>
+        <div class="rail">
+          <div class="shot"><img loading="lazy" src="assets/zentid-field-1.jpg" alt="Field app scheduling"></div>
+          <div class="shot"><img loading="lazy" src="assets/zentid-field-2.jpg" alt="Field app work progress photos"></div>
+          <div class="shot"><img loading="lazy" src="assets/zentid-field-4.jpg" alt="WhatsApp job updates"></div>
+          <div class="shot"><img loading="lazy" src="assets/zentid-field-3.jpg" alt="Client feedback"></div>
+          <div class="shot"><img loading="lazy" src="assets/zentid-manage-5.jpg" alt="Manage app dashboard"></div>
+          <div class="shot"><img loading="lazy" src="assets/zentid-manage-3.jpg" alt="Manage app job schedule"></div>
+          <div class="shot"><img loading="lazy" src="assets/zentid-manage-4.jpg" alt="Manage app reports"></div>
+          <div class="shot"><img loading="lazy" src="assets/zentid-field-5.jpg" alt="Attendance tracking"></div>
+        </div>
+        <div class="rail-hint"><i data-lucide="move-horizontal" width="14" height="14"></i>Drag or scroll</div>
+      </div>
+    </div>
 
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-    </script>
+    <div class="show glass reveal">
+      <div>
+        <div class="show-head"><img src="assets/petbey-icon.jpg" alt="Petbey icon"><div><h3>Petbey</h3><small>petbey.in · iOS + Android</small></div></div>
+        <p class="show-tagline">"Every tail deserves a safe place to rehome."</p>
+        <p>A mobile-first marketplace for safe pet rehoming and adoption, connecting verified owners and adopters. I led the cross-platform <strong>Flutter</strong> app and the <strong>NestJS / Prisma</strong> backend powering listings, messaging, and the Petspace dashboard.</p>
+        <ul class="feat"><li>Verified user profiles</li><li>Direct messaging</li><li>Multi-pet listings</li><li>Pet journey tracking</li><li>Social feed</li><li>Profile reporting</li></ul>
+        <div class="chips"><span class="chip">Flutter</span><span class="chip">NestJS</span><span class="chip">Prisma</span><span class="chip">PostgreSQL</span><span class="chip">Google Maps</span></div>
+        <div class="links">
+          <a class="btn btn-ghost btn-sm magnetic" href="https://www.petbey.in/" target="_blank" rel="noopener"><i data-lucide="globe" width="16" height="16"></i>Website</a>
+          <a class="btn btn-ghost btn-sm magnetic" href="https://apps.apple.com/us/app/petbey-where-pets-find-homes/id6477542468" target="_blank" rel="noopener"><i data-lucide="apple" width="16" height="16"></i>iOS app</a>
+        </div>
+      </div>
+      <div>
+        <div class="rail">
+          <div class="shot"><img loading="lazy" src="assets/petbey-1.jpg" alt="Petbey marketplace"></div>
+          <div class="shot"><img loading="lazy" src="assets/petbey-2.jpg" alt="Petbey connect sellers"></div>
+          <div class="shot"><img loading="lazy" src="assets/petbey-3.jpg" alt="Petbey profile"></div>
+          <div class="shot"><img loading="lazy" src="assets/petbey-4.jpg" alt="Petbey feed"></div>
+        </div>
+        <div class="rail-hint"><i data-lucide="move-horizontal" width="14" height="14"></i>Drag or scroll</div>
+      </div>
+    </div>
+
+    <div class="show glass reveal">
+      <div>
+        <div class="show-head"><div class="hl-icon" style="margin:0;width:54px;height:54px"><i data-lucide="layout-dashboard" width="24" height="24"></i></div><div><h3>Procube</h3><small>procube.cx · Digital studio</small></div></div>
+        <p class="show-tagline">"Your digital partner."</p>
+        <p>The digital studio where I lead software delivery, building web platforms and custom technology solutions for clients. I own the technical standards, architecture decisions, and code-review culture across the team's web and mobile projects.</p>
+        <div class="chips"><span class="chip">React</span><span class="chip">Next.js</span><span class="chip">TypeScript</span><span class="chip">NestJS</span></div>
+        <div class="links"><a class="btn btn-ghost btn-sm magnetic" href="https://www.procube.cx/" target="_blank" rel="noopener"><i data-lucide="globe" width="16" height="16"></i>Website</a></div>
+      </div>
+      <div class="web-visual">
+        <div class="browser-bar"><span></span><span></span><span></span></div>
+        <div class="wv-body"><div class="wv-big">procube<span style="color:var(--sky)">.cx</span></div><div class="wv-line" style="width:70%"></div><div class="wv-line" style="width:50%"></div><div class="wv-line" style="width:60%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <span class="tag reveal">Experience</span>
+    <h2 class="h2 reveal">Where I've worked</h2>
+    <div class="timeline">
+      <div class="tl-track"></div><div class="tl-fill"></div>
+      <div class="job glass reveal">
+        <div class="job-top"><div><h3>Software Development Team Lead <span class="now">NOW</span></h3><a class="co" href="https://procube.cx" target="_blank" rel="noopener">Procube.cx</a></div><time>MAY 2023 — PRESENT</time></div>
+        <ul>
+          <li>Lead the engineering team behind Zentid: two Flutter apps, a React dashboard, a client portal, a Next.js marketing site, an AI assistant, and the NestJS services behind them.</li>
+          <li>Designed the Flutter architecture: Clean Architecture layers, BLoC state management, get_it DI, Hive offline storage, and white-label flavors for two brands.</li>
+          <li>Built the backend on NestJS, Prisma and PostgreSQL with schema-per-tenant isolation, Redis, BullMQ, and integrations with WhatsApp, Zoho Books and Firebase.</li>
+          <li>Built the AI layer: a streaming chat service on the Vercel AI SDK and an MCP server that lets the model call the platform's APIs as tools.</li>
+          <li>Run code review and the Android/iOS release process; record design decisions as architecture decision records; mentor junior developers.</li>
+        </ul>
+      </div>
+      <div class="job glass reveal">
+        <div class="job-top"><div><h3>Software Engineer</h3><span class="co">Lithos Technosoft Pvt. Ltd.</span></div><time>FEB 2022 — APR 2023</time></div>
+        <ul>
+          <li>Built Stoccoz, a Flutter van-sales and delivery app connected to enterprise POS backends.</li>
+          <li>Designed its offline-first sync on SQLite with idempotent sync tokens, batched uploads and a retry queue, so sales recorded without signal were never lost.</li>
+          <li>Built the Petbey Flutter client and NestJS backend: feeds, media upload, listings and messaging.</li>
+        </ul>
+      </div>
+      <div class="job glass reveal">
+        <div class="job-top"><div><h3>Software Engineer Intern</h3><span class="co">Johnsys Solutions Pvt. Ltd.</span></div><time>DEC 2021 — FEB 2022</time></div>
+        <ul>
+          <li>Built front-end features with HTML, CSS, JavaScript, React, and Flutter.</li>
+          <li>Designed and implemented REST APIs for front-end / back-end communication.</li>
+        </ul>
+      </div>
+      <div class="job glass reveal">
+        <div class="job-top"><div><h3>Freelance Flutter Developer</h3><span class="co">Zantida, UK</span></div><time>DEC 2020 — PRESENT</time></div>
+        <ul>
+          <li>Cross-platform front-end development in Flutter for international clients.</li>
+          <li>Building and maintaining responsive, production-ready mobile UIs.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <span class="tag reveal">Stack</span>
+    <h2 class="h2 reveal">What I work with</h2>
+    <div class="skills">
+      <div class="skill-group glass reveal"><h4>Mobile</h4><div class="skill-list">
+        <span class="skill"><img src="https://cdn.simpleicons.org/flutter/02569B" alt="">Flutter</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/dart/0175C2" alt="">Dart</span>
+        <span class="skill">BLoC / Cubit</span><span class="skill">Clean Architecture</span><span class="skill">Hive</span><span class="skill">Dio</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/firebase/FFCA28" alt="">Firebase / FCM</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/android/3DDC84" alt="">Android</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/apple/FFFFFF" alt="">iOS</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/sentry/A1A4FF" alt="">Sentry</span>
+      </div></div>
+      <div class="skill-group glass reveal"><h4>Backend</h4><div class="skill-list">
+        <span class="skill"><img src="https://cdn.simpleicons.org/nestjs/E0234E" alt="">NestJS</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/nodedotjs/5FA04E" alt="">Node.js</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="">TypeScript</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="">PostgreSQL</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/prisma/FFFFFF" alt="">Prisma</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/redis/FF4438" alt="">Redis</span>
+        <span class="skill">BullMQ</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/mongodb/47A248" alt="">MongoDB</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/go/00ADD8" alt="">Go</span>
+      </div></div>
+      <div class="skill-group glass reveal"><h4>Frontend &amp; Web</h4><div class="skill-list">
+        <span class="skill"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="">React 19</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/nextdotjs/FFFFFF" alt="">Next.js</span>
+        <span class="skill">TanStack Router</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/reactquery/FF4154" alt="">React Query</span>
+        <span class="skill">Zustand</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="">Tailwind CSS</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/vite/646CFF" alt="">Vite</span>
+        <span class="skill">Static sites</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/capacitor/119EFF" alt="">Capacitor</span>
+      </div></div>
+      <div class="skill-group glass reveal"><h4>AI Engineering &amp; Tooling</h4><div class="skill-list">
+        <span class="skill"><img src="https://cdn.simpleicons.org/vercel/FFFFFF" alt="">Vercel AI SDK</span>
+        <span class="skill">LLM tool calling</span>
+        <span class="skill">MCP servers</span>
+        <span class="skill">Streaming (SSE)</span>
+        <span class="skill">Prompt design</span>
+        <span class="skill">AI-assisted dev (Claude Code)</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/docker/2496ED" alt="">Docker</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/gitlab/FC6D26" alt="">GitLab CI</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/cloudflare/F38020" alt="">Cloudflare</span>
+        <span class="skill"><img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="">WhatsApp API</span>
+        <span class="skill">Jest / Playwright</span>
+      </div></div>
+    </div>
+
+    <div class="beyond">
+      <div class="mini glass reveal">
+        <span class="tag">Education</span>
+        <h3>B.Tech, Information Technology</h3>
+        <p>School of Engineering, CUSAT · 2016 – 2020</p>
+        <p style="margin-top:.5rem">Cochin University of Science and Technology. Data structures, databases, networks and software engineering.</p>
+      </div>
+      <div class="mini glass reveal">
+        <span class="tag">Mentoring</span>
+        <h3>Internship Mentor</h3><p>MindEmpowered NGO. Technical roadmaps for interns, focused on industry readiness.</p>
+        <h3 style="margin-top:1rem">Architecture Reviewer</h3><p>Brototype. Design reviews of student projects for scalability and performance.</p>
+      </div>
+      <div class="mini glass reveal">
+        <span class="tag">Certifications</span>
+        <div class="cert"><i data-lucide="award" width="20" height="20"></i><div>HTML/CSS Specialist<small>Advanced UI Development Bootcamp</small></div></div>
+        <div class="cert"><i data-lucide="award" width="20" height="20"></i><div>ML &amp; OpenCV<small>Computer Vision Fundamentals</small></div></div>
+        <div class="cert"><i data-lucide="award" width="20" height="20"></i><div>Digital Marketing<small>Strategic Growth &amp; SEO</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="cta glass reveal">
+      <span class="tag">Contact</span>
+      <h2 class="h2">Have a product that has to <span class="grad">work in the real world?</span></h2>
+      <p class="lead">Mobile apps, web apps, backends, AI features, or the tricky parts in between. I reply within a day.</p>
+      <div class="cta-actions">
+        <button class="btn btn-primary magnetic" id="copyEmail" type="button"><i data-lucide="mail" width="18" height="18"></i>hashofficial98@gmail.com</button>
+        <a class="btn btn-ghost magnetic" href="https://wa.me/917012747208" target="_blank" rel="noopener"><i data-lucide="message-circle" width="18" height="18"></i>WhatsApp</a>
+        <a class="btn btn-ghost magnetic" href="https://www.linkedin.com/in/muhammed-ashique-k-7996b016b/" target="_blank" rel="noopener"><i data-lucide="linkedin" width="18" height="18"></i>LinkedIn</a>
+      </div>
+      <div class="copied" id="copied" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container foot">
+    <span>© <span id="year"></span> Muhammed Ashique K · Wayanad, Kerala</span>
+    <div class="socials">
+      <a class="glass" href="https://github.com/AshiqueHaneef" aria-label="GitHub" target="_blank" rel="noopener"><i data-lucide="github" width="18" height="18"></i></a>
+      <a class="glass" href="https://www.linkedin.com/in/muhammed-ashique-k-7996b016b/" aria-label="LinkedIn" target="_blank" rel="noopener"><i data-lucide="linkedin" width="18" height="18"></i></a>
+      <a class="glass" href="mailto:hashofficial98@gmail.com" aria-label="Email"><i data-lucide="mail" width="18" height="18"></i></a>
+      <a class="glass" href="https://wa.me/917012747208" aria-label="WhatsApp" target="_blank" rel="noopener"><i data-lucide="message-circle" width="18" height="18"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+if (window.lucide) lucide.createIcons();
+
+// Marquee items (duplicated once so the loop is seamless)
+const tech = [['flutter','02569B','Flutter'],['dart','0175C2','Dart'],['nestjs','E0234E','NestJS'],['postgresql','4169E1','PostgreSQL'],['redis','FF4438','Redis'],['firebase','FFCA28','Firebase'],['typescript','3178C6','TypeScript'],['react','61DAFB','React'],['nextdotjs','FFFFFF','Next.js'],['tailwindcss','06B6D4','Tailwind'],['vercel','FFFFFF','AI SDK'],['docker','2496ED','Docker'],['prisma','FFFFFF','Prisma'],['go','00ADD8','Go'],['whatsapp','25D366','WhatsApp API']];
+const track = document.querySelector('.marquee-track');
+const items = tech.map(([s,c,n]) => `<span class="marquee-item"><img src="https://cdn.simpleicons.org/${s}/${c}" alt="">${n}</span>`).join('');
+track.innerHTML = items + items;
+
+// Copy email
+document.getElementById('copyEmail').addEventListener('click', async () => {
+  const out = document.getElementById('copied');
+  try { await navigator.clipboard.writeText('hashofficial98@gmail.com'); out.textContent = 'Email copied to clipboard'; }
+  catch { location.href = 'mailto:hashofficial98@gmail.com'; }
+  setTimeout(() => out.textContent = '', 2500);
+});
+
+// Drag-to-scroll for screenshot rails
+document.querySelectorAll('.rail').forEach(rail => {
+  let down = false, startX = 0, start = 0;
+  rail.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; startX = e.clientX; start = rail.scrollLeft; rail.style.cursor = 'grabbing'; });
+  window.addEventListener('pointerup', () => { down = false; rail.style.cursor = ''; });
+  rail.addEventListener('pointermove', e => { if (down) rail.scrollLeft = start - (e.clientX - startX); });
+});
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(pointer: fine)').matches;
+
+if (window.gsap && !reduce) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Hero intro
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  tl.from('.hero-title .word', { yPercent: 110, duration: 1.1, stagger: 0.12 })
+    .from('.hero-in', { y: 24, opacity: 0, duration: 0.8, stagger: 0.1 }, '-=0.7')
+    .from('.device', { y: 120, opacity: 0, rotateX: 25, duration: 1.2, stagger: 0.12, ease: 'expo.out' }, '-=0.9')
+    .from('.profile', { y: 40, opacity: 0, scale: 0.95, duration: 0.9 }, '-=0.8')
+    .from('.float-pill', { scale: 0.6, opacity: 0, duration: 0.6, stagger: 0.15, ease: 'back.out(2)' }, '-=0.5');
+
+  // Gentle idle float on hero devices
+  gsap.utils.toArray('.device').forEach((d, i) => {
+    gsap.to(d, { y: '+=14', duration: 3 + i * 0.6, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 1.6 });
+  });
+
+  // Ambient orbs drift
+  gsap.to('.orb.a', { x: '8vw', y: '6vh', duration: 18, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+  gsap.to('.orb.b', { x: '-6vw', y: '10vh', duration: 22, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+  gsap.to('.orb.c', { x: '-10vw', y: '-6vh', duration: 26, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+
+  // Marquee
+  gsap.to('.marquee-track', { xPercent: -50, duration: 30, ease: 'none', repeat: -1 });
+
+  // Scroll reveals
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.from(el, { y: 50, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
+  });
+  ScrollTrigger.batch('.hl', { start: 'top 88%', onEnter: b => gsap.from(b, { y: 60, opacity: 0, rotateX: -12, duration: 0.9, stagger: 0.1, ease: 'power3.out' }) });
+  ScrollTrigger.batch('.shot', { start: 'top 92%', onEnter: b => gsap.from(b, { x: 80, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out' }) });
+
+  // Timeline line draws with scroll
+  gsap.fromTo('.tl-fill', { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.timeline', start: 'top 70%', end: 'bottom 60%', scrub: true } });
+
+  // Hero stage scrolls away with depth
+  gsap.to('#stage', { y: -80, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });
+
+  // Counters
+  gsap.utils.toArray('.count').forEach(el => {
+    const to = +el.dataset.to; const o = { v: 0 };
+    gsap.to(o, { v: to, duration: 1.6, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 95%' }, onUpdate: () => el.textContent = Math.round(o.v) });
+  });
+
+  if (fine) {
+    // Mouse parallax on hero stage
+    const stage = document.getElementById('stage');
+    const layers = stage.querySelectorAll('[data-depth]');
+    stage.closest('section').addEventListener('mousemove', e => {
+      const r = stage.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width / 2) / r.width, y = (e.clientY - r.top - r.height / 2) / r.height;
+      layers.forEach(l => gsap.to(l, { x: x * 30 * l.dataset.depth, rotationY: x * 6, rotationX: -y * 6, duration: 0.8, ease: 'power3.out', overwrite: 'auto' }));
+    });
+
+    // Cursor glow
+    const glow = document.querySelector('.cursor-glow');
+    window.addEventListener('mousemove', e => gsap.to(glow, { left: e.clientX, top: e.clientY, duration: 0.9, ease: 'power3.out' }));
+
+    // Magnetic buttons
+    document.querySelectorAll('.magnetic').forEach(b => {
+      b.addEventListener('mousemove', e => { const r = b.getBoundingClientRect(); gsap.to(b, { x: (e.clientX - r.left - r.width / 2) * 0.25, y: (e.clientY - r.top - r.height / 2) * 0.35, duration: 0.4, ease: 'power3.out' }); });
+      b.addEventListener('mouseleave', () => gsap.to(b, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' }));
+    });
+
+    // 3D tilt on highlight cards
+    document.querySelectorAll('.tilt').forEach(c => {
+      c.addEventListener('mousemove', e => { const r = c.getBoundingClientRect(); gsap.to(c, { rotationY: ((e.clientX - r.left) / r.width - 0.5) * 10, rotationX: -((e.clientY - r.top) / r.height - 0.5) * 10, transformPerspective: 900, duration: 0.5, ease: 'power3.out' }); });
+      c.addEventListener('mouseleave', () => gsap.to(c, { rotationY: 0, rotationX: 0, duration: 0.8, ease: 'power3.out' }));
+    });
+  }
+}
+</script>
 </body>
 </html>
